@@ -42,7 +42,7 @@
 					}
 					else
 					{
-						return t3rebra.qr(parent, str);
+						return t3rebra.query(parent, str);
 					}
 				}
 				else if(parent)
@@ -58,7 +58,7 @@
 					}
 					else
 					{
-						return t3rebra.qr(parent);
+						return t3rebra.query(parent);
 					}
 				}
 				return false;
@@ -78,7 +78,7 @@
 							}
 						else
 							{
-								return t3rebra.qr(parent,str);
+								return t3rebra.query(parent,str);
 							}
 					}
 				else if(parent)
@@ -94,7 +94,7 @@
 							}
 						else
 							{
-								return t3rebra.qr(parent);
+								return t3rebra.query(parent);
 							}
 					}	
 				return false;
@@ -114,7 +114,7 @@
 							}
 						else
 							{
-								return t3rebra.qa(parent, str);
+								return t3rebra.queries(parent, str);
 							}
 					}
 				else if(parent)
@@ -130,31 +130,35 @@
 							}
 						else
 							{
-								return t3rebra.qa(parent);
+								return t3rebra.queries(parent);
 							}
 					}
 				return false;
 			},
 		"query" : (parent=null, str=null) => 
-				{ 
+				{ 					
 					if(parent, str)
-					{
+					{	
+						str = String (str);
 						return parent.querySelector(str);
 					}
 					else if(parent)
 					{
+						parent = String (parent);
 						return d.querySelector(parent);
 					}
 					return false;		 
 				},
 		"queries" : (parent=null, str=null) => 
-				{
+				{					
 					if(parent && str)
 					{ 
+						str = String (str);
 						return parent.querySelectorAll(str);
 					}
 					else if(parent)
 					{ 
+						parent = String (parent);
 						return d.querySelectorAll(parent);
 					}
 					return;	 
@@ -163,6 +167,7 @@
 				{ 
 					if(parent && str)
 						{
+							str = String (str);
 							let invalid_tag = str.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
@@ -170,11 +175,12 @@
 								}
 							else
 								{
-									return t3rebra.qa(parent, str)[0];
+									return t3rebra.queries(parent, str)[0];
 								}
 						}
 					else if(parent)
 						{
+							parent = String (parent);
 							let invalid_tag = parent.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
@@ -182,7 +188,7 @@
 								}
 							else
 								{
-									return t3rebra.qa(parent)[0];
+									return t3rebra.queries(parent)[0];
 								}
 						}	
 					return false;
@@ -191,6 +197,7 @@
 				{ 
 					if(parent && str)
 						{
+							str = String (str);
 							let invalid_tag = str.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
@@ -198,11 +205,12 @@
 								}
 							else
 								{
-									return t3rebra.qa(parent, str);
+									return t3rebra.queries(parent, str);
 								}
 						}
 					else if(parent)
 						{
+							parent = String (parent);
 							let invalid_tag = parent.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
@@ -210,7 +218,7 @@
 								}
 							else
 								{
-									return t3rebra.qa(parent);
+									return t3rebra.queries(parent);
 								}
 						}	
 					return false;
