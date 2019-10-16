@@ -158,8 +158,7 @@
 						return d.querySelectorAll(parent);
 					}
 					return;	 
-				},
-		"queryall" : t3rebra.queries,	
+				},	
 		"tagname" : (parent=null, str=null) =>
 				{ 
 					if(parent && str)
@@ -225,7 +224,8 @@
 				return false;
 			}
 		} 
-	
+		
+		t3rebra.queryall = t3rebra.queries;
 		return t3rebra;
 	}
 		
