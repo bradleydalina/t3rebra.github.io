@@ -46,7 +46,7 @@
 				}
 				return false;
 			},
-		"cl" : (str=null) =>
+		"cs" : (str=null) =>
 			{
 				if(str)
 					{
@@ -66,7 +66,7 @@
 						}
 				return false;
 			},
-		"cs" : (str=null) =>
+		"ca" : (str=null) =>
 			{
 				if(str)
 					{
@@ -101,6 +101,22 @@
 						return d.querySelectorAll(str);
 					}
 					return;	 
+				},
+		"ts" : (str=null) =>
+				{ 
+					if(str)
+						{
+							let invalid_tag = str.match(/[^a-z]/gmi); // a valid tag a-zA-Z
+							if(!invalid_tag)
+								{
+									return d.getElementsByTagName(str)[0];
+								}
+							else
+								{
+									return t3rebra.qa(str)[0];
+								}
+						}
+					return false;
 				},
 		"ta" : (str=null) =>
 				{ 
