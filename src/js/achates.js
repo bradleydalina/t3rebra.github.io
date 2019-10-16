@@ -5,6 +5,7 @@
 	function t3()
 	{
 		const t3rebra = {
+		
 		"version":
 			{
 				name:"T3rebra Achates",
@@ -26,9 +27,9 @@
 			{
 				w.onload = callback();
 			},	
-		"id" : (str=null) =>
+		"id" : (parent = null, str=null) =>
 			{
-				if(str)
+				if(parent && str)
 				{
 					str = String (str);
 					let invalid_id = str.match(/[^#a-z0-9-_]/gmi); // a valid id #a-zA-Z0-9-_
@@ -36,19 +37,35 @@
 					{
 						if(str.indexOf("#") == -1 || str.indexOf("#") == 0)
 						{
-							return d.getElementById( str.replace(/#/gmi,'') );
+							return parent.getElementById( str.replace(/#/gmi,'') );
 						}
 					}
 					else
 					{
-						return t3rebra.qr(str);
+						return t3rebra.qr(parent, str);
+					}
+				}
+				else if(parent)
+				{
+					parent = String (parent);
+					let invalid_id = parent.match(/[^#a-z0-9-_]/gmi); // a valid id #a-zA-Z0-9-_
+					if(!invalid_id)
+					{
+						if(parent.indexOf("#") == -1 || parent.indexOf("#") == 0)
+						{
+							return d.getElementById( parent.replace(/#/gmi,'') );
+						}
+					}
+					else
+					{
+						return t3rebra.qr(parent);
 					}
 				}
 				return false;
 			},
-		"cs" : (str=null) =>
+		"class" : (parent=null, str=null) =>
 			{
-				if(str)
+				if(parent && str)
 					{
 						str = String (str);
 						let invalid_class = str.match(/[^.a-z0-9-_]/gmi); // a valid class .a-zA-Z0-9-_
@@ -56,17 +73,33 @@
 							{
 								if(str.indexOf(".") == -1 || str.indexOf(".") == 0)
 									{
-										return d.getElementsByClassName( str.replace(/\./gmi,'') )[0];
+										return parent.getElementsByClassName( str.replace(/\./gmi,'') )[0];
 									}
 							}
 						else
 							{
-								return t3rebra.qr(str);
+								return t3rebra.qr(parent,str);
 							}
-						}
+					}
+				else if(parent)
+					{
+						parent = String (parent);
+						let invalid_class = parent.match(/[^.a-z0-9-_]/gmi); // a valid class .a-zA-Z0-9-_
+						if(!invalid_class)
+							{
+								if(parent.indexOf(".") == -1 || parent.indexOf(".") == 0)
+									{
+										return d.getElementsByClassName( parent.replace(/\./gmi,'') )[0];
+									}
+							}
+						else
+							{
+								return t3rebra.qr(parent);
+							}
+					}	
 				return false;
 			},
-		"ca" : (str=null) =>
+		"classes" : (parent=null, str=null) =>
 			{
 				if(str)
 					{
@@ -76,62 +109,111 @@
 							{
 								if(str.indexOf(".") == -1 || str.indexOf(".") == 0)
 									{
-										return d.getElementsByClassName( str.replace(/\./gmi,'') );
+										return parent.getElementsByClassName( str.replace(/\./gmi,'') );
 									}
 							}
 						else
 							{
-								return t3rebra.qa(str);
+								return t3rebra.qa(parent, str);
+							}
+					}
+				else if(parent)
+					{
+						parent = String (parent);
+						let invalid_class = parent.match(/[^.a-z0-9-_]/gmi); // a valid class .a-zA-Z0-9-_
+						if(!invalid_class)
+							{
+								if(parent.indexOf(".") == -1 || parent.indexOf(".") == 0)
+									{
+										return d.getElementsByClassName( parent.replace(/\./gmi,'') );
+									}
+							}
+						else
+							{
+								return t3rebra.qa(parent);
 							}
 					}
 				return false;
 			},
-		"qr" : (str=null) => 
+		"query" : (parent=null, str=null) => 
 				{ 
-					if(str)
+					if(parent, str)
 					{
-						return d.querySelector(str);
+						return parent.querySelector(str);
+					}
+					else if(parent)
+					{
+						return d.querySelector(parent);
 					}
 					return false;		 
 				},
-		"qa" : (str=null) => 
+		"queries" : (parent=null, str=null) => 
 				{
-					if(str)
+					if(parent && str)
 					{ 
-						return d.querySelectorAll(str);
+						return parent.querySelectorAll(str);
+					}
+					else if(parent)
+					{ 
+						return d.querySelectorAll(parent);
 					}
 					return;	 
 				},
-		"ts" : (str=null) =>
+		"queryall" : t3rebra.queries,	
+		"tagname" : (parent=null, str=null) =>
 				{ 
-					if(str)
+					if(parent && str)
 						{
 							let invalid_tag = str.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
-									return d.getElementsByTagName(str)[0];
+									return parent.getElementsByTagName(str)[0];
 								}
 							else
 								{
-									return t3rebra.qa(str)[0];
+									return t3rebra.qa(parent, str)[0];
 								}
 						}
+					else if(parent)
+						{
+							let invalid_tag = parent.match(/[^a-z]/gmi); // a valid tag a-zA-Z
+							if(!invalid_tag)
+								{
+									return d.getElementsByTagName(parent)[0];
+								}
+							else
+								{
+									return t3rebra.qa(parent)[0];
+								}
+						}	
 					return false;
 				},
-		"ta" : (str=null) =>
+		"tagnames" : (parent=null, str=null) =>
 				{ 
-					if(str)
+					if(parent && str)
 						{
 							let invalid_tag = str.match(/[^a-z]/gmi); // a valid tag a-zA-Z
 							if(!invalid_tag)
 								{
-									return d.getElementsByTagName(str);
+									return parent.getElementsByTagName(str);
 								}
 							else
 								{
-									return t3rebra.qa(str);
+									return t3rebra.qa(parent, str);
 								}
 						}
+					else if(parent)
+						{
+							let invalid_tag = parent.match(/[^a-z]/gmi); // a valid tag a-zA-Z
+							if(!invalid_tag)
+								{
+									return d.getElementsByTagName(parent);
+								}
+							else
+								{
+									return t3rebra.qa(parent);
+								}
+						}	
 					return false;
 				},
 		"hash": () =>
