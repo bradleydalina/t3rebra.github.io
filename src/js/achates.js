@@ -101,7 +101,7 @@
 			},
 		"classes" : (parent=null, str=null) =>
 			{
-				if(str)
+				if(parent && str)
 					{
 						str = String (str);
 						let invalid_class = str.match(/[^.a-z0-9-_]/gmi); // a valid class .a-zA-Z0-9-_
