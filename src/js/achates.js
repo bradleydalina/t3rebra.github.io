@@ -1,6 +1,6 @@
 (function (w,d) 
 { 
-	'use_strict';
+	//'use_strict';
 	
 	function t3()
 	{
