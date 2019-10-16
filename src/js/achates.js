@@ -163,7 +163,7 @@
 					}
 					return;	 
 				},	
-		"tagname" : (parent=null, str=null) =>
+		"tag" : (parent=null, str=null) =>
 				{ 
 					if(parent && str)
 						{
@@ -193,7 +193,7 @@
 						}	
 					return false;
 				},
-		"tagnames" : (parent=null, str=null) =>
+		"tags" : (parent=null, str=null) =>
 				{ 
 					if(parent && str)
 						{
