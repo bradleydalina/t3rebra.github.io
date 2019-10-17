@@ -1,8 +1,6 @@
 (function (w,d){ 
-    'use_strict';	
-  
-    function fn_achates(){
-	  
+    'use_strict';	  
+    function fn_achates(){	  
 		const achates = {		
 			"version":{
 				name:"T3rebra Achates",
@@ -179,11 +177,9 @@
 				return false;
 			}
 		} 
-
 		achates.queryall = achates.queries;
 		return achates;
 	}
-
 	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null || typeof (w.t3) === "undefined" || w.t3 == null) {
 		w.t3rebra = fn_achates();
 		w.t3 = fn_achates();	
@@ -202,5 +198,4 @@
 		w.t3 = extend(append_obj, w.t3rebra);
 		//console.info(JSON.stringify(w.t3rebra));
 	}
-
 })(window, document);
