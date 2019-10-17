@@ -1,6 +1,5 @@
-(function (w,d) 
-{ 
-	//'use_strict';	
+(function (w,d) { 
+	'use_strict';	
 	function t3()
 	{
 		const t3rebra = {		
@@ -234,16 +233,31 @@
 		t3rebra.queryall = t3rebra.queries;
 		return t3rebra;
 	}
-		
-	if(typeof (t3rebra) === "undefined")
+	
+    
+	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null)
 	{
-		w.t3rebra = t3();
-		w.t3 = t3();
-		//console.log(JSON.stringify(t3rebra));
+	    w.t3rebra = t3();
+		var t3 = w.t3rebra;
+		//console.log(w.t3rebra);
+		//console.log(JSON.stringify(w.t3rebra));
 	}
 	else
 	{
-		//console.info(JSON.stringify(t3rebra));
+	    var append_t3 = t3();
+	    
+	    	function extend(obj, src) 
+	    	{
+                for (var key in src) 
+                {
+                    if (src.hasOwnProperty(key)) obj[key] = src[key];
+                }
+                return obj;
+            }
+            
+            w.t3rebra = extend(append_t3, w.t3rebra);
+            var t3 = w.t3rebra;
+		    //console.info(JSON.stringify(w.t3rebra));
 	}
 		
 })(window, document);
