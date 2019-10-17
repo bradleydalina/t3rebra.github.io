@@ -181,6 +181,7 @@
 		//console.log(JSON.stringify(w.t3rebra));
 	}
 	else {
+		console.info("T3rebra is Defined");
 		//var append_obj = fn_achates();	    
 		//function extend(obj, src) {
 		//	for (var key in src) {
