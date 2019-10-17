@@ -1,8 +1,8 @@
 (function (w,d) { 
 	'use_strict';	
-	function t3()
+	function fn_achates()
 	{
-		const t3rebra = {		
+		const achates = {		
 							"version":
 							{
 								name:"T3rebra Achates",
@@ -39,7 +39,7 @@
 										}
 										else
 										{
-											return t3rebra.query(parent, str);
+											return achates.query(parent, str);
 										}
 									}
 									else if(parent)
@@ -55,7 +55,7 @@
 										}
 										else
 										{
-											return t3rebra.query(parent);
+											return achates.query(parent);
 										}
 									}
 									return false;
@@ -75,7 +75,7 @@
 												}
 											else
 												{
-													return t3rebra.query(parent,str);
+													return achates.query(parent,str);
 												}
 										}
 									else if(parent)
@@ -91,7 +91,7 @@
 												}
 											else
 												{
-													return t3rebra.query(parent);
+													return achates.query(parent);
 												}
 										}	
 									return false;
@@ -111,7 +111,7 @@
 												}
 											else
 												{
-													return t3rebra.queries(parent, str);
+													return achates.queries(parent, str);
 												}
 										}
 									else if(parent)
@@ -127,7 +127,7 @@
 												}
 											else
 												{
-													return t3rebra.queries(parent);
+													return achates.queries(parent);
 												}
 										}
 									return false;
@@ -172,7 +172,7 @@
 													}
 												else
 													{
-														return t3rebra.queries(parent, str)[0];
+														return achates.queries(parent, str)[0];
 													}
 											}
 										else if(parent)
@@ -185,7 +185,7 @@
 													}
 												else
 													{
-														return t3rebra.queries(parent)[0];
+														return achates.queries(parent)[0];
 													}
 											}	
 										return false;
@@ -202,7 +202,7 @@
 													}
 												else
 													{
-														return t3rebra.queries(parent, str);
+														return achates.queries(parent, str);
 													}
 											}
 										else if(parent)
@@ -215,7 +215,7 @@
 													}
 												else
 													{
-														return t3rebra.queries(parent);
+														return achates.queries(parent);
 													}
 											}	
 										return false;
@@ -230,32 +230,31 @@
 								}
 						} 
 		
-		t3rebra.queryall = t3rebra.queries;
-		return t3rebra;
+		achates.queryall = achates.queries;
+		return achates;
 	}
 	
     
 	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null)
 	{
-	    w.t3rebra = t3();	    
+	    w.t3rebra = fn_achates();	    
 	    //console.log(w.t3rebra);
 	    //console.log(JSON.stringify(w.t3rebra));
 	}
 	else
 	{
-	    var append_t3 = t3();
-	    
-	    	function extend(obj, src) 
-	    	{
-                for (var key in src) 
-                {
-                    if (src.hasOwnProperty(key)) obj[key] = src[key];
-                }
-                return obj;
-            }
-            
-            w.t3rebra = extend(append_t3, w.t3rebra);
-            //console.info(JSON.stringify(w.t3rebra));
+	    var append_obj = fn_achates();	    
+		function extend(obj, src) 
+		{
+			for (var key in src) 
+			{
+				if (src.hasOwnProperty(key)) obj[key] = src[key];
+			}
+			return obj;
+		}
+		
+		w.t3rebra = extend(append_obj, w.t3rebra);
+		//console.info(JSON.stringify(w.t3rebra));
 	}
 	const t3 = w.t3rebra;
 		
