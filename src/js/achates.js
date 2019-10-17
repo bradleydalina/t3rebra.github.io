@@ -238,10 +238,14 @@
 	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null)
 	{
 	    w.t3rebra = t3();
-	    w.t3 = t3();
+	    
 		//console.log(w.t3rebra);
 		//console.log(JSON.stringify(w.t3rebra));
 	}
+	else if(typeof (w.t3) === "undefined" || w.t3 == null)
+		{
+			w.t3 = t3();
+		}
 	else
 	{
 	    var append_t3 = t3();
