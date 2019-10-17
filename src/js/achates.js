@@ -235,7 +235,7 @@
 	}
 	
     
-	if(typeof (w.t3) === "undefined" || w.t3 == null)
+	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null)
 	{
 	    //w.t3rebra = t3();
 	    w.t3 = w.t3rebra;
@@ -256,7 +256,7 @@
                 return obj;
             }
             
-            w.t3 = extend(append_t3, w.t3rebra);
+            w.t3rebra = extend(append_t3, w.t3rebra);
             //w.t3 = w.t3rebra;
 		    //console.info(JSON.stringify(w.t3rebra));
 	}
