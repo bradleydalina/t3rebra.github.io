@@ -235,9 +235,10 @@
 	}
 	
     
-	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null)
+	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null || typeof (w.t3) === "undefined" || w.t3 == null)
 	{
-	    w.t3rebra = fn_achates();	    
+	    w.t3rebra = fn_achates();
+	    w.t3 = fn_achates();	
 	    //console.log(w.t3rebra);
 	    //console.log(JSON.stringify(w.t3rebra));
 	}
@@ -254,8 +255,8 @@
 		}
 		
 		w.t3rebra = extend(append_obj, w.t3rebra);
+		w.t3 = extend(append_obj, w.t3rebra);
 		//console.info(JSON.stringify(w.t3rebra));
 	}
-	const t3 = w.t3rebra;
 		
 })(window, document);
