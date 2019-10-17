@@ -181,15 +181,15 @@
 		//console.log(JSON.stringify(w.t3rebra));
 	}
 	else {
-		var append_obj = fn_achates();	    
-		function extend(obj, src) {
-			for (var key in src) {
-				if (src.hasOwnProperty(key)) obj[key] = src[key];
-			}
-			return obj;
-		}
-		w.t3rebra = extend(append_obj, w.t3rebra);
-		w.t3 = extend(append_obj, w.t3rebra);
+		//var append_obj = fn_achates();	    
+		//function extend(obj, src) {
+		//	for (var key in src) {
+		//		if (src.hasOwnProperty(key)) obj[key] = src[key];
+		//	}
+		//	return obj;
+		//}
+		//w.t3rebra = extend(append_obj, w.t3rebra);
+		//w.t3 = extend(append_obj, w.t3rebra);
 		//console.info(JSON.stringify(w.t3rebra));
 	}
 })(window, document);
