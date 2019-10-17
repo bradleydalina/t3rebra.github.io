@@ -8,14 +8,8 @@
 				description : "Vanilla Js Mini Library",
 				filename: "achates.js",
 				url:"https://t3rebra.github.io/src/js/achates.js",
-				date :  "September 29, 2019 02:57am"
-			},
-			"author":{
-				name:"Bradley B. Dalina",
-				profession:"Senior System Engineer IV, Wordpress Fullstack Developer",
-				email:"bdalina54@gmail.com",
-				number:"(+63)9264482952",
-				url:"https://bdalina54.github.io/"
+				date :  "September 29, 2019 02:57am",
+				"author":"t3rebra@gmail.com"
 			},
 			"ready": (callback=null) => {
 				w.onload = callback();
