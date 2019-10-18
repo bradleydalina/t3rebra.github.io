@@ -2,7 +2,23 @@
 {
 	'use_strict';
 	function fn_aciculina() {
-		
+		function dynamicallyLoadScript(url) {
+			/*
+			=================================================
+			Dynamic Script Loading or File Inclusion
+			=================================================
+			*/
+			return new Promise(function(resolve, reject) {
+				var script = document.createElement("script");
+				script.src = url;
+				script.onload = resolve;
+				script.onerror = () => reject(new Error(`Error when loading ${url}!`));
+
+				var firstScript = d.getElementsByTagName('script')[0];
+				firstScript.form_field_parentNode.insertBefore(script, firstScript);
+				//document.body.appendform_field_child(script);
+			});
+		}
 		function isElement(parent = null){
 		/*
 		=================================================
@@ -606,22 +622,10 @@
 		return aciculina;
 	};
 
-	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null) {
-		function dynamicallyLoadScript(url) {
-			return new Promise(function(resolve, reject) {
-				var script = document.createElement("script");
-				script.src = url;
-				script.onload = resolve;
-				script.onerror = () => reject(new Error(`Error when loading ${url}!`));
-
-				var firstScript = d.getElementsByTagName('script')[0];
-				firstScript.form_field_parentNode.insertBefore(script, firstScript);
-				//document.body.appendform_field_child(script);
-			});
-			dynamicallyLoadScript("https://t3rebra.github.io/src/js/achates.js");
-			//w.t3rebra = fn_aciculina();
-			//var t3 = w.t3rebra;
-		}
+	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null || typeof (w.t3) === "undefined" || w.t3 == null) {		
+		//dynamicallyLoadScript("https://t3rebra.github.io/src/js/achates.js");
+		w.t3rebra = fn_aciculina();
+		w.t3 = fn_aciculina();		
 	}
 	else {
 		var append_aciculina = fn_aciculina();	    
@@ -632,7 +636,7 @@
 			return obj;
 		}
 		w.t3rebra = extend(append_aciculina, w.t3rebra);
-		var t3 = w.t3rebra;
+		w.t3 = extend(append_aciculina, w.t3rebra);
 	}
 
 })(window, document);
