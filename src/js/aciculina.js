@@ -135,7 +135,12 @@
 		let toQueries = toQueryAll;
 		
 		const aciculina = {			
-            version : {
+            version : {				
+				/*
+				=================================================
+				Plugin Destails 
+				=================================================
+				*/
 				name:"Terebra Aciculina",
 				id:"1.0",
 				description : "Centralized form validation in a single ajax request template",
@@ -143,11 +148,6 @@
 				date :  "June 29, 2019 2:00pm",
 				author:"t3rebra@gmail.com",
 			},
-			/*
-			=================================================
-			Validators 
-			=================================================
-			*/
 			isEmail : function isEmail(email) {
 				/*
 				=================================================
@@ -163,6 +163,9 @@
 				URL validator
 				=================================================
 				*/
+				if(String (url).toLowerCase().replace(/http:\/\//, '') == 'localhost' ) {
+					return true;
+				}
 				const res = new RegExp('^((ft|htt)ps?:\\/\\/)?'+ // protocol
 					'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
 					'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
@@ -171,11 +174,6 @@
 					'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 					return res.test(String(url));
 			},
-			/*
-			=================================================
-			Ajax Object Functions & Variables
-			=================================================
-			*/
 			ajax_data : {
 				/*
 				=================================================
@@ -214,18 +212,12 @@
 				Timeout or delay function
 				=================================================
 				*/
-				return new Promise(function(resolve, reject)
-				{
+				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
 						(callback) ? callback() : '';
 					}, ms);
 				});
 			},
-			/*
-			=================================================
-			Ajax Status
-			=================================================
-			*/
 			ajax_run:null,
 			ajax_done:null,
 			ajax_fail:null,
@@ -261,21 +253,21 @@
 					}
 					if (this.readyState == 4 && this.status == 200) {
 						if(aciculina.settings['responseType']=='json') {
-						  	aciculina.data['response'] = this.response;
+						  	aciculina.ajax_data['response'] = this.response;
 						}
 						else {
-						  	aciculina.data['response'] = this.responseText;
+						  	aciculina.ajax_data['response'] = this.responseText;
 						}
 						if(ajax_done) {
-						  	return ajax_done(aciculina.data['response']);
+						  	return ajax_done(aciculina.ajax_data['response']);
 						}
 						else {
 							console.group('Server Request - Result');
-							console.info(aciculina.data['response']);
+							console.info(aciculina.ajax_data['response']);
 							console.info(`Success ${xhttp.status}: ${xhttp.statusText}`);
 							console.table(xhttp.getAllResponseHeaders());
 							console.groupEnd();
-							//return aciculina.data['response'];
+							//return aciculina.ajax_data['response'];
 						}
 					}
 					else if(this.readyState == 4 && this.status != 200) {
@@ -291,34 +283,34 @@
 							return ajax_complete();
 						}
 						else {
-							console.table(aciculina.data);
+							console.table(aciculina.ajax_data);
 							console.info(`Server Complete Response ${xhttp.status}: ${xhttp.statusText}`);
 						}
 						let fd = [];
-						for(let key of aciculina.data['formdata'].keys()) {
+						for(let key of aciculina.ajax_data['formdata'].keys()) {
 							fd.push(key);
 						}
 						for(let i =0; i < fd.length; i++) {
-							aciculina.data['formdata'].delete(fd[i]);
+							aciculina.ajax_data['formdata'].delete(fd[i]);
 						}
 					}
 				}
-				xhttp.open(aciculina.settings['type'], 'https://cors-anywhere.herokuapp.com/'+aciculina.settings['url'], aciculina.settings['async'], aciculina.settings['user'], aciculina.settings['password']);
-				xhttp.responseType = aciculina.settings['responseType'];
-				xhttp.setRequestHeader("Accept", aciculina.settings['responseType']);
+				xhttp.open(aciculina.ajax_settings['type'], 'https://cors-anywhere.herokuapp.com/'+aciculina.ajax_settings['url'], aciculina.ajax_settings['async'], aciculina.ajax_settings['user'], aciculina.ajax_settings['password']);
+				xhttp.responseType = aciculina.ajax_settings['responseType'];
+				xhttp.setRequestHeader("Accept", aciculina.ajax_settings['responseType']);
 
-				xhttp.send(aciculina.data['formdata']);
+				xhttp.send(aciculina.ajax_data['formdata']);
 			},					
-			/*
-			=================================================
-			Forms Object Functions & Variables
-			=================================================
-			*/
 			form_field_form_field_parent : null,
 			form_field_form_field_child : null,
 			form_form_button :null,
 			form_field_ignore : 'ignore',				
-			form_init : function form_init(form_field_parent=null, form_field_child=null, form_button=null) {
+			form_init : function form_init(form_field_parent=null, form_field_child=null, form_button=null) {				
+				/*
+				=================================================
+				Initialize Form 
+				=================================================
+				*/
 				if(form_field_parent===null) {
 					this.form_field_parent = String (form_field_parent);
 					this.form_field_child = String (form_field_child);
@@ -358,7 +350,6 @@
 					for(let i=0; i < toQueries(el).length; i++) {
 						toQueries(el)[i].oninput = (e)=>{ toQueries(el)[i].style.border=''; };
 					}
-					//qr(el).addEventListener('input', (e)=> { qr(el).style.border=''; } );
 				}
 				else {
 					if(typeof this.form_field_child =='string') {
@@ -473,274 +464,141 @@
 
 				let validEmail = this.isEmail;
 				let validUrl = this.isUrl;
+				
+				function input_validator(el) {
+					if(el.getAttribute("type").toLowerCase() =='number') {
+						let int_value = Number ((el.value).trim());
+						if( (int_value !== 0  && String (int_value).length > 0) {
+							is_valid(el);
+						}
+						else {
+							is_invalid(el);
+						}
+					}
+					else if(el.getAttribute("type").toLowerCase() =='email') {
+						if( isEmail( el.value ) ) {
+							is_valid(el);
+						}
+						else {
+							is_invalid(el);
+						}
+					}
+					else if(el.getAttribute("type").toLowerCase() =='url' ) {
+						if(isUrl( el.value ) ) {
+							is_valid(el);
+						}
+						else {
+							is_invalid(el);
+						}
+					}
+					else if( (el.value).trim() === '' || (el.value).trim().length === 0 ) {
+						is_invalid(el);
+					}
+					else {
+						is_valid(el);
+					}
+				}
+				function push_data(el) {
+					if( el.tagName =='select') {
+						aciculina.data['rawdata'].push({'name':el.getAttribute('name'), 'value': el.value });
+						aciculina.data['formdata'].append(el.getAttribute('name'), el.value );
+					}
+					else if( el.getAttribute('type') =='checkbox') {
+						if( el.checked ) {
+							aciculina.data['rawdata'].push({'name':el.getAttribute('name'), 'value': el.value });
+							aciculina.data['formdata'].append(el.getAttribute('name'), el.value );
+						}
+					}
+					else if( el.getAttribute('type') =='radio') {
+						if( el.checked ) {
+							aciculina.data['rawdata'].push({'name':el.getAttribute('name'), 'value': el.value });
+							aciculina.data['formdata'].append(el.getAttribute('name'), el.value );
+						}
+					}
+					else if( el.getAttribute('type') =='file') {
+						if( toId(el.getAttribute('id')).files.length > 0 )
+						{
+							aciculina.data['filedata'].push({'name':el.getAttribute('name'), 'id':el.getAttribute('id')});
+						}
+					}
+					else {
+						aciculina.data['rawdata'].push({'name': el.getAttribute('name'), 'value': el.value });
+						aciculina.data['formdata'].append(el.getAttribute('name'), el.value );
+					}
+				}
+				function is_valid(el){
+					el.style.border='';
+				}
+				function is_invalid(el){
+					el.value='';
+					el.style.border='solid 1px #ff0000';
+					first_empty = (!first_empty) ? el : null;					
+				}
 
 				if(typeof this.form_field_child =='string') {
-					let array = qa(this.form_field_parent+' '+this.form_field_child);
+					let array = toQueries(this.form_field_parent+' '+this.form_field_child);
 					for(let i =0; i < array.length; i++) {
-						if( (array[i].tagName).toLowerCase() != 'form_button' && (array[i].type).toLowerCase() !='submit') {
+						if( (array[i].tagName).toLowerCase() != 'button' && (array[i].type).toLowerCase() !='submit') {
 							if("required" in array[i].attributes) {
-								if(array[i].getAttribute("type").toLowerCase() =='number') {
-									if( (array[i].value).trim() != 0 && (array[i].value).trim() != '0' && (array[i].value).trim().length > 0) {
-										array[i].style.border='';
-									}
-									else {
-										array[i].value='';
-										array[i].style.border='solid 1px #ff0000';
-
-										if(!first_empty) {
-											first_empty = array[i];
-										}
-									}
-								}
-								else if(array[i].getAttribute("type").toLowerCase() =='email') {
-									if( validEmail( array[i].value ) ) {
-										array[i].style.border='';
-									}
-									else {
-										array[i].value='';
-										array[i].style.border='solid 1px #ff0000';
-
-										if(!first_empty) {
-										first_empty = array[i];
-										}
-									}
-								}
-								else if(array[i].getAttribute("type").toLowerCase() =='url' ) {
-									if(validUrl( array[i].value ) ) {
-										array[i].style.border='';
-									}
-									else {
-										array[i].value='';
-										array[i].style.border='solid 1px #ff0000';
-
-										if(!first_empty) {
-											first_empty = array[i];
-										}
-									}
-								}
-								else if( (array[i].value).trim() === '' || (array[i].value).trim().length === 0 ) {
-									array[i].value='';
-									array[i].style.border='solid 1px #ff0000';
-
-									if(!first_empty) {
-										first_empty = array[i];
-									}
-								}
-								else {
-									array[i].style.border='';
-								}
+								input_validator(array[i]);
 							}
 							else {
-								if(array[i].getAttribute("type").toLowerCase() =='email' ) {
-									if( (array[i].value).trim() != '' || (array[i].value).trim().length > 0  ) {
-										if( validEmail( array[i].value ) ) {
-											array[i].style.border='';
-										}
-										else {
-											array[i].value='';
-											array[i].style.border='solid 1px #ff0000';
-
-											if(!first_empty) {
-												first_empty = array[i];
-											}
-										}
-									}
-								}
-								else if(array[i].getAttribute("type").toLowerCase() =='url' ) {
-									if( (array[i].value).trim() != '' || (array[i].value).trim().length > 0  ) {
-										if( validUrl( array[i].value ) ) {
-											array[i].style.border='';
-										}
-										else {
-											array[i].value='';
-											array[i].style.border='solid 1px #ff0000';
-
-											if(!first_empty) {
-												first_empty = array[i];
-											}
-										}
-									}
-								}
-							}
-
-							if( array[i].tagName =='select') {
-								aciculina.data['rawdata'].push({'name':array[i].getAttribute('name'), 'value': array[i].value });
-								aciculina.data['formdata'].append(array[i].getAttribute('name'), array[i].value );
-							}
-							else if( array[i].getAttribute('type') =='checkbox') {
-								if( array[i].checked ) {
-									aciculina.data['rawdata'].push({'name':array[i].getAttribute('name'), 'value': array[i].value });
-									aciculina.data['formdata'].append(array[i].getAttribute('name'), array[i].value );
-								}
-							}
-							else if( array[i].getAttribute('type') =='radio') {
-								if( array[i].checked ) {
-									aciculina.data['rawdata'].push({'name':array[i].getAttribute('name'), 'value': array[i].value });
-									aciculina.data['formdata'].append(array[i].getAttribute('name'), array[i].value );
-								}
-							}
-							else if( array[i].getAttribute('type') =='file') {
-								if( document.getElementById(array[i].getAttribute('id')).files.length > 0 )
-								{
-									aciculina.data['filedata'].push({'name':array[i].getAttribute('name'), 'id':array[i].getAttribute('id')});
-								}
-							}
-							else {
-								aciculina.data['rawdata'].push({'name': array[i].getAttribute('name'), 'value': array[i].value });
-								aciculina.data['formdata'].append(array[i].getAttribute('name'), array[i].value );
-							}
+								input_validator(array[i]);
+							}							
+							push_data(array[i]);
+							
 						}
 					}
 				}
 				else {
 					for( let i =0; i < this['form_field_child'].length; i++) {
-						let array = qa(this.form_field_parent+' '+this.form_field_child[i]);
+						let array = toQueries(this.form_field_parent+' '+this.form_field_child[i]);
 						for(let j =0; j < array.length; j++) {
-							if( (array[j].tagName).toLowerCase() != 'form_button' && (array[j].type).toLowerCase() !='submit') {
+							if( (array[j].tagName).toLowerCase() != 'button' && (array[j].type).toLowerCase() !='submit') {
 								if("required" in array[j].attributes) {
-									if(array[j].getAttribute("type").toLowerCase() =='number') {
-										if( (array[j].value).trim() != 0 && (array[j].value).trim() != '0' && (array[j].value).trim().length > 0) {
-											array[j].style.border='';
-										}
-										else {
-											array[j].style.border='solid 1px #ff0000';
-											array[j].value='';
-											if(!first_empty) {
-												first_empty = array[j];
-											}
-										}
-									}
-									else if(array[j].getAttribute("type").toLowerCase() =='email') {
-										if( validEmail( array[j].value ) ) {
-											array[j].style.border='';
-										}
-										else {
-											array[j].style.border='solid 1px #ff0000';
-											array[j].value='';
-											if(!first_empty) {
-												first_empty = array[j];
-											}
-										}
-									}
-									else if(array[j].getAttribute("type").toLowerCase() =='url' ) {
-										if(validUrl( array[j].value ) ) {
-											array[j].style.border='';
-										}
-										else {
-											array[j].style.border='solid 1px #ff0000';
-											array[j].value='';
-											if(!first_empty) {
-												first_empty = array[j];
-											}
-										}
-									}
-									else if( (array[j].value).trim() === '' || (array[j].value).trim().length === 0 ) {
-										array[j].style.border='solid 1px #ff0000';
-										array[j].value='';
-										if(!first_empty) {
-											first_empty = array[j];
-										}
-									}
-									else {
-										array[j].style.border='';
-									}
+									input_validator(array[j]);									
 								}
 								else {
-									if(array[j].getAttribute("type").toLowerCase() =='email' ) {
-										if( (array[j].value).trim() != '' || (array[j].value).trim().length > 0  ) {
-											if( validEmail( array[j].value ) ) {
-												array[j].style.border='';
-											}
-											else {
-												array[j].style.border='solid 1px #ff0000';
-												array[j].value='';
-												if(!first_empty) {
-													first_empty = array[j];
-												}
-											}
-										}
-									}
-									else if(array[j].getAttribute("type").toLowerCase() =='url' ) {
-										if( (array[j].value).trim() != '' || (array[j].value).trim().length > 0  ) {
-											if( validUrl( array[j].value ) ) {
-												array[j].style.border='';
-											}
-											else {
-												array[j].style.border='solid 1px #ff0000';
-												array[j].value='';
-												if(!first_empty) {
-													first_empty = array[j];
-												}
-											}
-										}
-									}
+									input_validator(array[j]);
 								}
-
-								if( array[j].tagName =='select') {
-									aciculina.data['rawdata'].push({'name':array[j].getAttribute('name'), 'value':array[j].value });
-									aciculina.data['formdata'].append(array[j].getAttribute('name'), array[j].value );
-								}
-								else if( array[j].getAttribute('type') =='checkbox') {
-									if(array[j].checked) {
-										aciculina.data['rawdata'].push({'name':array[j].getAttribute('name'), 'value':array[j].value });
-										aciculina.data['formdata'].append(array[j].getAttribute('name'), array[j].value );
-									}
-								}
-								else if( array[j].getAttribute('type') =='radio') {
-									if(array[j].checked) {
-										aciculina.data['rawdata'].push({'name':array[j].getAttribute('name'), 'value':array[j].value });
-										aciculina.data['formdata'].append(array[j].getAttribute('name'), array[j].value );
-									}
-								}
-								else if( array[j].getAttribute('type') =='file') {
-									if( array[j].files.length > 0 ) {
-										aciculina.data['filedata'].push({'name':array[j].getAttribute('name'), 'id':array[j].getAttribute('id')});
-									}
-								}
-								else {
-									aciculina.data['rawdata'].push({'name':array[j].getAttribute('name'), 'value':array[j].value });
-									aciculina.data['formdata'].append(array[j].getAttribute('name'), array[j].value );
-								}
+								push_data(array[j]);
 							}
 						}
 					}
 				}
 
 				if(first_empty) {
-					aciculina.data['rawdata'] = [];
-					for(let pair of aciculina.data['formdata'].entries()) {
-						aciculina.data['formdata'].delete(pair[0]);
+					aciculina.ajax_data['rawdata'] = [];
+					for(let pair of aciculina.ajax_data['formdata'].entries()) {
+						aciculina.ajax_data['formdata'].delete(pair[0]);
 					}
-					aciculina.data['filedata'] = [];
+					aciculina.ajax_data['filedata'] = [];
 					first_empty.focus();
 					first_empty.value='';
 					first_empty=null;
 					return false;
 				}
-				else {
-					if(callback) {
-						callback();
-					}
+				else {					
 					first_empty=null;
-
-					if(aciculina.data['filedata'].length > 0) {
-						for(let i =0; i < aciculina.data['filedata'].length; i++) {
-							let attachments = document.getElementById(aciculina.data['filedata'][i].id).files;
+					(typeof callback =="function") && callback();	
+					if(aciculina.ajax_data['filedata'].length > 0) {
+						for(let i =0; i < aciculina.ajax_data['filedata'].length; i++) {
+							let attachments = toId(aciculina.ajax_data['filedata'][i].id).files;
 							let files = attachments;
 							// Loop through each of the selected files.
 							for (let x = 0; x < files.length; x++) {
 								let file = files[x];
 								// Add the file to the request.
-								aciculina.data['formdata'].append(aciculina.data['filedata'][i].name, file, file.name);
+								aciculina.ajax_data['formdata'].append(aciculina.ajax_data['filedata'][i].name, file, file.name);
 							}
 						}
-						aciculina.settings['cache']=false;
-						aciculina.settings['contentType']='multipart/form-data';
-						aciculina.settings['processData']=false;
-						aciculina.data['filedata'] =null;
+						aciculina.ajax_settings['cache']=false;
+						aciculina.ajax_settings['contentType']='multipart/form-data';
+						aciculina.ajax_settings['processData']=false;
+						aciculina.ajax_data['filedata'] =null;
 						console.warn('There is a present file for upload!');
 					}
-					return aciculina.data['formdata'];
+					return aciculina.ajax_data['formdata'];
 				}
 			}
 		}
