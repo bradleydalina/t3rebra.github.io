@@ -60,7 +60,7 @@
 			}
 			else if(parent) {
 				parent = String (parent);
-				return (d.getElementsByClassName( parent.replace(/\./gmi,'') )) : d.getElementsByClassName( parent.replace(/\./gmi,'') ): null;
+				return (d.getElementsByClassName( parent.replace(/\./gmi,'') )) ? d.getElementsByClassName( parent.replace(/\./gmi,'') ): null;
 			}
 			return false;
 		}		
