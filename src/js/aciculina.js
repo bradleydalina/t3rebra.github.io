@@ -157,7 +157,7 @@
 				const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 				return re.test(String(email).toLowerCase());
 			},
-			isUrl = function isUrl(url) {
+			isUrl : function isUrl(url) {
 				/*
 				=================================================
 				URL validator
@@ -468,7 +468,7 @@
 				function input_validator(el) {
 					if(el.getAttribute("type").toLowerCase() =='number') {
 						let int_value = Number ((el.value).trim());
-						if( (int_value !== 0  && String (int_value).length > 0) {
+						if( int_value !== 0  && String (int_value).length > 0) {
 							is_valid(el);
 						}
 						else {
