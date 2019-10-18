@@ -439,7 +439,7 @@
 				}
 				else {
 					if(typeof this.form_field_child =='string') {
-						this.reset(this.form_field_child);
+						this.form_reset(this.form_field_child);
 					}
 					else {
 						if(this.form_field_child===null) {
