@@ -33,7 +33,6 @@
 				parent = d.querySelector(parent);
 				if(!parent){
 					(aciculina.log_error) && console.warn(`Invalid element node (${parent})`);
-					return false;
 				}	
 				else{
 					return parent;
@@ -59,7 +58,6 @@
 				return (d.getElementById( parent.replace(/#/gmi,'') )) ? d.getElementById( parent.replace(/#/gmi,'') ) : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toId(parent = string, child = string) or toId(string)");
-			return false;
 		}		
 		let toClass = (parent = null, child=null) => {
 		/*
@@ -77,7 +75,6 @@
 				return (d.getElementsByClassName( parent.replace(/\./gmi,'') )[0]) ? d.getElementsByClassName( parent.replace(/\./gmi,'') )[0] : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toClass(parent = string, child = string) or toClass(string)");
-			return false;
 		}		
 		let toClasses = (parent = null, child=null) => {
 		/*
@@ -95,7 +92,6 @@
 				return (d.getElementsByClassName( parent.replace(/\./gmi,'') )) ? d.getElementsByClassName( parent.replace(/\./gmi,'') ): null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toClasses(parent = string, child = string) or toClasses(string)");
-			return false;
 		}		
 		let toTag = (parent = null, child=null) => {
 		/*
@@ -113,7 +109,6 @@
 				return (d.getElementsByTagName(parent)[0]) ? d.getElementsByTagName(parent)[0] : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toTag(parent = string, child = string) or toTag(string)");
-			return false;
 		}		
 		let toTags = (parent = null, child=null) => {
 		/*
@@ -131,7 +126,6 @@
 				return (d.getElementsByTagName(parent)) ? d.getElementsByTagName(parent) : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toTags(parent = string, child = string) or toTags(string)");
-			return false;
 		}
 		let toQuery = (parent = null, child=null) => {
 		/*
@@ -149,7 +143,6 @@
 				return (d.querySelector(parent)) ? d.querySelector(parent) : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toQuery(parent = string, child = string) or toQuery(string)");
-			return false;
 		}
 		let toQueryAll = (parent = null, child=null) => {
 		/*
@@ -167,10 +160,21 @@
 				return (d.querySelectorAll(parent)) ? d.querySelectorAll(parent) : null;
 			}
 			(aciculina.log_error) && console.warn("Invalid use of function arguments toQueries(parent = string, child = string) or toQueries(string)");
-			return false;
 		}		
 		let toQueries = toQueryAll;
-		
+		if (window.Element && !Element.prototype.closest) {
+			Element.prototype.closest =
+			function(s) {
+				var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+				i,
+				el = this;
+				do {
+					i = matches.length;
+					while (--i >= 0 && matches.item(i) !== el) {};
+				} while ((i < 0) && (el = el.parentElement));
+				return el;
+			};
+		}
 		const aciculina = {			
             version : {				
 				/*
@@ -290,7 +294,7 @@
 						}
 					}
 					if (this.readyState == 4 && this.status == 200) {
-						if(aciculina.settings['responseType']=='json') {
+						if(aciculina.ajax_settings['responseType']=='json') {
 						  	aciculina.ajax_data['response'] = this.response;
 						}
 						else {
@@ -374,15 +378,43 @@
 					this.form_field_child = (form_field_parent[0].form_field_child) ? String (form_field_parent[0].form_field_child) : "";
 					this.form_button = (form_field_parent[0].form_button) ? String (form_field_parent[0].form_button) : "";
 				}
-				//try{
+				try{
 					aciculina.form_oninput();
-				//	aciculina.form_reset();
-				//	aciculina.form_focus();
-				//}
-				//catch(e){
-				//	console.error(e.message);
-				//}
-			},			
+					aciculina.form_reset();
+					aciculina.form_focus();
+					let el = (this.form_field_parent) ? toQueries(this.form_field_parent+' '+this.form_field_child) : toQueries(this.form_field_child);	
+					
+					if(toQuery(this.form_field_parent).nodeName.toLowerCase() =="form") {
+						toQuery(this.form_field_parent).addEventListener("keyup", function(e){ if (e.keyCode == 13 || e.which == 13 ){e.preventDefault();}});
+						toQuery(this.form_field_parent).addEventListener("keypress",function(e){ if (e.keyCode == 13 || e.which == 13 ){e.preventDefault();}});
+						toQuery(this.form_field_parent).addEventListener("keydown", function(e){ if (e.keyCode == 13 || e.which == 13 ){e.preventDefault();}});
+					}
+					for(let i = 0; i < el.length; i++) {
+						el[i].addEventListener("keyup", function(e) {
+							if (e.keyCode == 13 || e.which == 13 ) { //&& e.shiftKey
+								if(i+1 < el.length) {
+									e.preventDefault();
+									if(String (this.value) !='') {
+										el[i+1].focus();
+									}
+								}
+								else{
+									aciculina.form_submit();
+								}
+							}							
+							else if(e.keyCode == 8 || e.which == 8)  {
+								if(String (this.value).length == 0) {
+									if(i-1 >= 0) {
+										el[i-1].focus();
+									}
+								}
+							}}, false);
+					}
+				}
+				catch(e){
+					console.error(e.message);
+				}
+			},								
 			form_oninput : function form_oninput(el="") {
 				/*
 				=================================================
@@ -394,7 +426,6 @@
 					let array_el = (this.form_field_parent) ? toQueries(this.form_field_parent+' '+el) : toQueries(el);
 					if(!array_el) {
 						(aciculina.log_error) && console.warn(`No valid element node found for ${array_el}`);
-						return false;
 					}					
 					for(let i=0; i < array_el.length; i++) {
 						array_el[i].oninput = (e)=>{ array_el[i].style.border=''; };
@@ -407,7 +438,6 @@
 					else {
 						if(this.form_field_child==="") {
 							(aciculina.log_error) && console.warn('No resource or valid value was set');
-							return false;
 						}
 						for(let i =0; i < this.form_field_child.length; i++) {
 							this.form_oninput(this.form_field_child[i]);
@@ -428,7 +458,7 @@
 						if( (array_el[i].tagName).toLowerCase() != 'button' && (array_el[i].type).toLowerCase() !='submit') {
 							if( String (array_el[i].value) === '' || Number (array_el[i].value) === 0  || String (array_el[i].value).length === 0) {
 								array_el[i].focus();
-								return false;
+								return;
 							}
 						}
 					}
@@ -440,7 +470,6 @@
 					else {
 						if(this.form_field_child==="") {
 							(aciculina.log_error) && console.warn('No resource or valid value was set');
-							return false;
 						}
 						for(let i =0; i < (this.form_field_child).length; i++) {
 							this.form_focus(this.form_field_child[i]);
@@ -458,12 +487,14 @@
 					el = String (el);
 					let array_el = (this.form_field_parent) ? toQueries(this.form_field_parent+' '+el) : toQueries(el);
 					for(let i =0; i < array_el.length; i++) {
-						if( (array_el.tagName).toLowerCase() != 'button' && (array_el.type).toLowerCase() !='submit') {
-							if(array_el !== toClass(this.ignore)) {
-								if( array_el.tagName != 'select' || array_el.type != 'checkbox' || array_el.type != 'radio' ) {
-									array_el.value='';
-									array_el.style.border='';
-								}								
+						if( (array_el[i].tagName).toLowerCase() != 'button' && (array_el[i].type).toLowerCase() !='submit') {
+							if(this.form_field_ignore) {
+								if(array_el[i] !== toClass(this.form_field_ignore)) {
+									if( array_el[i].tagName != 'select' || array_el[i].type != 'checkbox' || array_el[i].type != 'radio' ) {
+										array_el[i].value='';
+										array_el[i].style.border='';
+									}								
+								}
 							}
 						}
 					}
@@ -475,7 +506,6 @@
 					else {
 						if(this.form_field_child==="") {
 							(aciculina.log_error) && console.warn('No resource or valid value was set');
-							return false;
 						}
 						for(let i =0; i < this.form_field_child.length; i++) {
 							this.form_reset(this.form_field_child[i]);
@@ -488,50 +518,43 @@
 				=================================================
 				Trigger on click event
 				=================================================
-				*/
+				*/		
+				function do_action(el, callback) {
+					el.addEventListener("click", function(e) { 
+						e.preventDefault();
+						if(typeof callback =="function") {
+							return callback();
+						}
+					});
+				}
 				if(typeof el == "function") {
-					let pel = (this.form_field_parent) ? toQuery(this.form_field_parent) : "";
-					
-					if(!pel || pel == "") {						
+					if(!this.form_field_parent) {
 						if(this.form_button && toQuery(this.form_button)) {
-							toQuery(this.form_button).onclick = function(e) { 
-								e.preventDefault();
-							}
+							do_action(toQuery(this.form_button), el);
 						}
 						else {
 							(aciculina.log_error) && console.warn(`No valid element node found for ${this.form_button}`);	
 						}
 					}
-					else {
-						if(toQuery(pel, this.form_button)){
-							toQuery(pel, this.form_button).onclick = function(e) { 
-								e.preventDefault();
-							}
+					else {						
+						if(toQuery(this.form_field_parent, this.form_button)){
+							do_action(toQuery(this.form_field_parent, this.form_button),el);
 						}
-						else if(toQuery(pel, 'input[type="submit"]')){
-							toQuery(pel, 'input[type="submit"]').onclick = function(e) { 
-								e.preventDefault();
-							}
+						else if(toQuery(this.form_field_parent, 'input[type="submit"]')){
+							do_action(toQuery(this.form_field_parent, 'input[type="submit"]'), el);
 						}
-						else if(toQuery(pel, 'button[type="submit"]')){
-							toQuery(pel, 'button[type="submit"]').onclick = function(e) { 
-								e.preventDefault();
-							}
+						else if(toQuery(this.form_field_parent, 'button[type="submit"]')){
+							do_action(toQuery(this.form_field_parent, 'button[type="submit"]'), el);
 						}						
 						else{
 							(aciculina.log_error) && console.warn('No valid submit button element found');
-							return false;						
 						}					
-					}					
-					(typeof callback =="function") && callback();
+					}	
 				}					
-				else if(el && typeof el == "string") {
+				else if(typeof el == "string") {
 					el = String (el);
 					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+el) : toQuery(el);
-					el.onclick = function(e) { 
-						e.preventDefault(); 
-						(typeof callback =="function") && callback();
-					}
+					do_action(el, callback);
 				}
 				else {
 					(aciculina.log_error) && console.warn('Invalid arguments');
@@ -652,7 +675,7 @@
 				function is_invalid(el){
 					el.value='';
 					el.style.border='solid 1px #ff0000';
-					first_empty = (!first_empty) ? el : null;					
+					first_empty = (!first_empty) ? el : first_empty;
 				}
 
 				if(typeof this.form_field_child =='string') {
@@ -686,8 +709,8 @@
 						}
 					}
 				}
-
-				if(first_empty) {
+				
+				if(first_empty){
 					aciculina.ajax_data['rawdata'] = [];
 					for(let pair of aciculina.ajax_data['formdata'].entries()) {
 						aciculina.ajax_data['formdata'].delete(pair[0]);
