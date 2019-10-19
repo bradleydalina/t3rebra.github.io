@@ -486,20 +486,50 @@
 				Trigger on click event
 				=================================================
 				*/
-				if(el) {
+				if(el && typeof el =="function") {
+					let pel = (this.form_field_parent) ? toQuery(this.form_field_parent) : "";
+					
+					if(!pel) {
+						if(this.form_button && toQuery(this.form_button)) {
+							toQuery(this.form_button).onclick = function(e) { 
+								e.preventDefault();
+							}
+						}
+						else {
+							(aciculina.log_error) && console.warn(`No valid element node found for ${el}`);	
+						}
+					}
+					else {
+						if(toQuery(pel, this.form_button)){
+							toQuery(pel, this.form_button).onclick = function(e) { 
+								e.preventDefault();
+							}
+						}
+						if(toQuery(pel, 'input[type="submit"]')){
+							toQuery(pel, 'input[type="submit"]').onclick = function(e) { 
+								e.preventDefault();
+							}
+						}
+						else if(toQuery(pel, 'button[type="submit"]')){
+							toQuery(pel, 'button[type="submit"]').onclick = function(e) { 
+								e.preventDefault();
+							}
+						}
+						
+						else{
+							(aciculina.log_error) && console.warn('No valid submit button element found');
+							return false;						
+						}					
+					}					
+					(typeof callback =="function") && callback();
+				}					
+				else(el && typeof el == "string") {
 					el = String (el);
 					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+el) : toQuery(el);
 					el.onclick = function(e) { 
 						e.preventDefault(); 
 						(typeof callback =="function") && callback();
 					}
-				}
-				else {
-					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+this.form_button) : toQuery(this.form_button);
-					el.onclick = function(e) { 
-						e.preventDefault(); 
-						(typeof callback =="function") && callback();
-					}					
 				}
 			},
 			form_submit : function form_submit() {
@@ -510,7 +540,13 @@
 				*/
 				let el = (this.form_field_parent) ? toQuery(this.form_field_parent) : "";
 				if(!el) {
-					(aciculina.log_error) && console.warn(`No valid element node found for ${el}`);					
+					if(this.form_button && toQuery(this.form_button)) {
+							toQuery(this.form_button).click();
+						}
+					else {
+						(aciculina.log_error) && console.warn(`No valid element node found for ${el}`);	
+					}
+						
 				}
 				else {
 					if(el.tagName == 'form') {
@@ -524,9 +560,6 @@
 					}
 					else if(toQuery(el, this.form_button)){
 						toQuery(el, this.form_button).click();
-					}
-					else if(toQuery(this.form_button)){
-						toQuery(this.form_button).click();
 					}
 					else{
 						(aciculina.log_error) && console.warn('No valid submit button element found');
