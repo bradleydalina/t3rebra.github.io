@@ -523,13 +523,16 @@
 					}					
 					(typeof callback =="function") && callback();
 				}					
-				else(el && typeof el == "string") {
+				else if(el && typeof el == "string") {
 					el = String (el);
 					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+el) : toQuery(el);
 					el.onclick = function(e) { 
 						e.preventDefault(); 
 						(typeof callback =="function") && callback();
 					}
+				}
+				else {
+					(aciculina.log_error) && console.warn('Invalid arguments');
 				}
 			},
 			form_submit : function form_submit() {
