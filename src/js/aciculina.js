@@ -488,14 +488,14 @@
 				*/
 				if(el) {
 					el = String (el);
-					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+el) : toId(el);
+					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+el) : toQuery(el);
 					el.onclick = function(e) { 
 						e.preventDefault(); 
 						(typeof callback =="function") && callback();
 					}
 				}
 				else {
-					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+this.form_button) : toId(this.form_button);
+					el = (this.form_field_parent) ? toQuery(this.form_field_parent+' '+this.form_button) : toQuery(this.form_button);
 					el.onclick = function(e) { 
 						e.preventDefault(); 
 						(typeof callback =="function") && callback();
