@@ -38,7 +38,10 @@
 				else{
 					return parent;
 				}
-			}	
+			}
+			else {
+				return parent;
+			}
 		}		
 		let toId = (parent = null, child=null) => {
 		/*
@@ -49,7 +52,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.getElementById( child.replace(/#/gmi,'') )) ? parent.getElementById( child.replace(/#/gmi,'') ) : null;
+				return (parent.getElementById( child.replace(/#/gmi,'') )) ? parent.getElementById( child.replace(/#/gmi,'') ) : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -67,7 +70,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.getElementsByClassName( str.replace(/\./gmi,'') )[0]) ? parent.getElementsByClassName( str.replace(/\./gmi,'') )[0] : null;
+				return (parent.getElementsByClassName( str.replace(/\./gmi,'') )[0]) ? parent.getElementsByClassName( str.replace(/\./gmi,'') )[0] : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -85,7 +88,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.getElementsByClassName( str.replace(/\./gmi,'') )) ? parent.getElementsByClassName( str.replace(/\./gmi,'') ) : null;
+				return (parent.getElementsByClassName( str.replace(/\./gmi,'') )) ? parent.getElementsByClassName( str.replace(/\./gmi,'') ) : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -103,7 +106,7 @@
 			if(parent && child) {
 				parent=isElement(parent);
 				child = String (child);
-				return (parent && parent.getElementsByTagName(str)[0]) ? parent.getElementsByTagName(str)[0] : null;
+				return (parent.getElementsByTagName(str)[0]) ? parent.getElementsByTagName(str)[0] : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -121,7 +124,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.getElementsByTagName(str)) ? parent.getElementsByTagName(str) : null;
+				return (parent.getElementsByTagName(str)) ? parent.getElementsByTagName(str) : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -139,7 +142,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.querySelector(child)) ? parent.querySelector(child) : null;
+				return (parent.querySelector(child)) ? parent.querySelector(child) : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -157,7 +160,7 @@
 			if(parent && child) {
 				parent = isElement(parent);
 				child = String (child);
-				return (parent && parent.querySelectorAll(child)) ? parent.querySelectorAll(child) : null;
+				return (parent.querySelectorAll(child)) ? parent.querySelectorAll(child) : null;
 			}
 			else if(parent) {
 				parent = String (parent);
@@ -347,7 +350,7 @@
 				=================================================
 				*/
 				if(form_field_parent==="") {
-					this.form_field_parent = (form_field_parent) ? String (form_field_parent) : "";
+					this.form_field_parent = "";
 					this.form_field_child = (form_field_child) ? String (form_field_child) : "";
 					this.form_button = (form_button) ? String (form_button) : "";
 				}
@@ -371,14 +374,14 @@
 					this.form_field_child = (form_field_parent[0].form_field_child) ? String (form_field_parent[0].form_field_child) : "";
 					this.form_button = (form_field_parent[0].form_button) ? String (form_field_parent[0].form_button) : "";
 				}
-				try{
+				//try{
 					aciculina.form_oninput();
-					aciculina.form_reset();
-					aciculina.form_focus();
-				}
-				catch(e){
-					console.error(e.message);
-				}
+				//	aciculina.form_reset();
+				//	aciculina.form_focus();
+				//}
+				//catch(e){
+				//	console.error(e.message);
+				//}
 			},			
 			form_oninput : function form_oninput(el="") {
 				/*
@@ -486,17 +489,17 @@
 				Trigger on click event
 				=================================================
 				*/
-				if(el && typeof el =="function") {
+				if(typeof el == "function") {
 					let pel = (this.form_field_parent) ? toQuery(this.form_field_parent) : "";
 					
-					if(!pel) {
+					if(!pel || pel == "") {						
 						if(this.form_button && toQuery(this.form_button)) {
 							toQuery(this.form_button).onclick = function(e) { 
 								e.preventDefault();
 							}
 						}
 						else {
-							(aciculina.log_error) && console.warn(`No valid element node found for ${el}`);	
+							(aciculina.log_error) && console.warn(`No valid element node found for ${this.form_button}`);	
 						}
 					}
 					else {
@@ -505,7 +508,7 @@
 								e.preventDefault();
 							}
 						}
-						if(toQuery(pel, 'input[type="submit"]')){
+						else if(toQuery(pel, 'input[type="submit"]')){
 							toQuery(pel, 'input[type="submit"]').onclick = function(e) { 
 								e.preventDefault();
 							}
@@ -514,8 +517,7 @@
 							toQuery(pel, 'button[type="submit"]').onclick = function(e) { 
 								e.preventDefault();
 							}
-						}
-						
+						}						
 						else{
 							(aciculina.log_error) && console.warn('No valid submit button element found');
 							return false;						
