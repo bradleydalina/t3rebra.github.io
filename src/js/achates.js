@@ -4,6 +4,8 @@
 		const achates = {		
 			"version":{
 				name:"T3rebra Achates",
+				call:"t3rebra01",
+				alias:"t310",
 				id:"1.0",
 				description : "Vanilla Js Mini Library",
 				filename: "achates.js",
