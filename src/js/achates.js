@@ -174,23 +174,14 @@
 		achates.queryall = achates.queries;
 		return achates;
 	}
-	if(typeof (w.t3rebra) === "undefined" || w.t3rebra == null || typeof (w.t3) === "undefined" || w.t3 == null) {
-		w.t3rebra = fn_achates();
-		w.t3 = fn_achates();	
+	if(typeof (w.t3rebra01) === "undefined" || w.t3rebra01 == null || typeof (w.t301) === "undefined" || w.t301 == null) {
+		w.t3rebra01 = fn_achates();
+		w.t301 = fn_achates();	
 		//console.log(w.t3rebra);
 		//console.log(JSON.stringify(w.t3rebra));
 	}
 	else {
 		console.info("T3rebra is Defined");
-		//var append_obj = fn_achates();	    
-		//function extend(obj, src) {
-		//	for (var key in src) {
-		//		if (src.hasOwnProperty(key)) obj[key] = src[key];
-		//	}
-		//	return obj;
-		//}
-		//w.t3rebra = extend(append_obj, w.t3rebra);
-		//w.t3 = extend(append_obj, w.t3rebra);
 		//console.info(JSON.stringify(w.t3rebra));
 	}
 })(window, document);
